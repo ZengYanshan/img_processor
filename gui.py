@@ -4,7 +4,7 @@ from tkinter.ttk import *
 import os
 import ctypes
 
-from PIL import ImageTk
+from PIL import Image, ImageTk
 
 from img_file import image_paths2str
 
@@ -81,9 +81,9 @@ def confirm_concat_image(concat_img):
         canvas.configure(scrollregion=canvas.bbox('all'))
     canvas.bind('<Control-MouseWheel>', zoom)
 
-    # Convert the image to a format suitable for Tkinter
+    # 画布显示图片
     img = ImageTk.PhotoImage(concat_img)
-    image_id = canvas.create_image(0, 0, anchor='nw', image=img)
+    canvas.create_image(0, 0, anchor='nw', image=img)
     canvas.image = img  # Keep a reference to avoid garbage collection
 
     # 弹窗询问用户
