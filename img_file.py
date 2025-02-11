@@ -8,12 +8,19 @@ def get_image_paths(directory):
     print_image_paths(image_paths)
     return image_paths
 
-# 打印图片路径
+# 生成图片路径字符串
 def image_paths2str(image_paths):
     img_path_str = ""
     for img_path in image_paths:
         img_path_str += img_path + '\n'
     return img_path_str
 
+# 打印图片路径
 def print_image_paths(image_paths):
     print(image_paths2str(image_paths))
+
+# 保存图片
+def save_image(img, output_path):
+    img.save(output_path)
+    print(f"拼接完成，已保存为{output_path}")
+    # return output_path
