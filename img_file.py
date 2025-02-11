@@ -9,6 +9,11 @@ def get_image_paths(directory):
     return image_paths
 
 # 打印图片路径
-def print_image_paths(image_paths):
+def image_paths2str(image_paths):
+    img_path_str = ""
     for img_path in image_paths:
-        print(img_path)
+        img_path_str += img_path + '\n'
+    return img_path_str
+
+def print_image_paths(image_paths):
+    print(image_paths2str(image_paths))

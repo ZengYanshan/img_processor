@@ -8,8 +8,8 @@ if __name__ == '__main__':
     print_image_paths(image_paths)
 
     # 用户确认结果是否正确
-    user_input = input("图片及其顺序是否正确？(y/n): ")
-    if user_input.lower() == 'y':
+    confirm = confirm_selected_images(image_paths)
+    if confirm:
         print("拼接图片中...")
         output_path = concatenate_images_vertically(image_paths)
         open_in_explorer(output_path)
