@@ -6,7 +6,7 @@ import ctypes
 
 from PIL import Image, ImageTk
 
-from img_file import image_paths2str
+from img_file import image_paths2str, save_image
 
 root = None
 
@@ -65,30 +65,29 @@ def confirm_concat_image(concat_img):
     canvas.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
 
-    # 绑定：鼠标滚轮 -> 纵滚动条
-    def scroll_y(event):
-        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-    canvas.bind_all("<MouseWheel>", scroll_y)
-
-    # 绑定：Ctrl + 鼠标滚轮 -> 缩放
-    def zoom(event):
-        scale = 1.0
-        if event.delta > 0:
-            scale *= 1.1
-        elif event.delta < 0:
-            scale /= 1.1
-        canvas.scale('all', event.x, event.y, scale, scale)
-        canvas.configure(scrollregion=canvas.bbox('all'))
-    canvas.bind('<Control-MouseWheel>', zoom)
-
     # 画布显示图片
     img = ImageTk.PhotoImage(concat_img)
-    canvas.create_image(0, 0, anchor='nw', image=img)
+    img_id = canvas.create_image(0, 0, anchor='nw', image=img)
     canvas.image = img  # Keep a reference to avoid garbage collection
+
+    # 绑定：鼠标滚轮 -> 纵滚动条
+    def scroll_y(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+    canvas.bind_all("<MouseWheel>", scroll_y)
 
     # 弹窗询问用户
     response = messagebox.askokcancel("确认拼接结果", "拼接结果是否正确？")
     return response
+
+def save_image_file(img):
+    file_path = filedialog.asksaveasfilename(defaultextension=".png",
+                                             filetypes=[("PNG files", "*.png"), ("All files", "*.*")])
+    if file_path:
+        save_image(img, file_path)
+        return file_path
+    else:
+        print("取消保存")
+        return None
 
 # 打开文件管理器并选中图片
 # 需保证路径正确，否则会打开“此电脑”

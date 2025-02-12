@@ -23,4 +23,3 @@ def print_image_paths(image_paths):
 def save_image(img, output_path):
     img.save(output_path)
     print(f"拼接完成，已保存为{output_path}")
-    # return output_path
