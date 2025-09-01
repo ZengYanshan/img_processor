@@ -76,7 +76,7 @@ def confirm_concat_image(concat_img):
     canvas.bind_all("<MouseWheel>", scroll_y)
 
     # 弹窗询问用户
-    response = messagebox.askokcancel("确认拼接结果", "拼接结果是否正确？")
+    response = messagebox.askokcancel("确认拼接结果", "是否保存拼接后的图片？")
     return response
 
 def save_image_file(img):

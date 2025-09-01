@@ -23,7 +23,7 @@ if __name__ == '__main__':
         # output_path = os.path.join(directory, new_filename)
 
         output_path = save_image_file(concat_img)
-        if output_path != None:
+        if output_path is not None:
             open_in_explorer(output_path)
     else:
         print("拼接图片不正确")
