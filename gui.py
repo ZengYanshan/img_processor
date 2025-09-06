@@ -23,12 +23,66 @@ def init():
     root.tk.call('tk', 'scaling', scale_factor / 75)
 
 # 弹窗选择多个图片
-def select_image_files():
+def select_image_files(on_confirm):
+    # 打开文件选择对话框
     file_paths = filedialog.askopenfilenames(
         title="选择图片",
         filetypes=[("Image Files", "*.jpg;*.jpeg;*.png;*.bmp;*.gif")]
     )
-    return list(file_paths)
+
+    if not file_paths:
+        return []
+
+    # 创建自定义排序窗口
+    root = Tk()
+    root.title("调整图片顺序")
+
+    # 显示文件列表
+    listbox = Listbox(root, selectmode=SINGLE, width=80, height=20)
+    for path in file_paths:
+        listbox.insert(END, path)
+    listbox.pack()
+
+    # 上移按钮
+    def move_up():
+        selected = listbox.curselection()
+        if not selected:
+            return
+        index = selected[0]
+        if index > 0:
+            item = listbox.get(index)
+            listbox.delete(index)
+            listbox.insert(index - 1, item)
+            listbox.select_set(index - 1)
+
+    # 下移按钮
+    def move_down():
+        selected = listbox.curselection()
+        if not selected:
+            return
+        index = selected[0]
+        if index < listbox.size() - 1:
+            item = listbox.get(index)
+            listbox.delete(index)
+            listbox.insert(index + 1, item)
+            listbox.select_set(index + 1)
+
+    # 确认按钮
+    def confirm():
+        nonlocal file_paths
+        file_paths = list(listbox.get(0, END))
+        root.destroy()
+        if on_confirm:
+            on_confirm(file_paths)
+
+    # 按钮布局
+    Button(root, text="上移", command=move_up).pack(side=LEFT, padx=5, pady=5)
+    Button(root, text="下移", command=move_down).pack(side=LEFT, padx=5, pady=5)
+    Button(root, text="确认", command=confirm).pack(side=RIGHT, padx=5, pady=5)
+
+    root.mainloop()
+
+    return file_paths
 
 def confirm_selected_images(image_paths):
     response = messagebox.askokcancel("确认图片", "图片及其顺序是否正确？\n" + image_paths2str(image_paths))
@@ -77,6 +131,7 @@ def confirm_concat_image(concat_img):
 
     # 弹窗询问用户
     response = messagebox.askokcancel("确认拼接结果", "是否保存拼接后的图片？")
+    top.destroy()
     return response
 
 def save_image_file(img):

@@ -2,13 +2,11 @@ from img_file import *
 from img_process import *
 from gui import *
 
-if __name__ == '__main__':
-    init()
-
-    # 用户选择图片
-    image_paths = select_image_files()
+def handle_selected_images(image_paths):
     print_image_paths(image_paths)
+    concat(image_paths)
 
+def concat(image_paths):
     # 拼接图片
     print("拼接图片中...")
     concat_img = concatenate_images_vertically(image_paths)
@@ -27,3 +25,11 @@ if __name__ == '__main__':
             open_in_explorer(output_path)
     else:
         print("拼接图片不正确")
+
+if __name__ == '__main__':
+    init()
+
+    # 用户选择图片
+    image_paths = select_image_files(handle_selected_images)
+
+
